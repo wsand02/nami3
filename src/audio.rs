@@ -15,7 +15,8 @@ const MONO: usize = 1;
 const STEREO: usize = 2;
 
 pub fn wav_decode(input_path: &PathBuf, output_path: &PathBuf) -> Result<String, anyhow::Error> {
-    let mut reader = hound::WavReader::open(&input_path).unwrap();
+    let mut reader = hound::WavReader::open(&input_path)
+        .map_err(|e| anyhow::anyhow!("Failed to open WAV file: {}", e))?;
     let channels = reader.spec().channels as usize;
     let bit_depth = reader.spec().bits_per_sample;
     if channels != MONO && channels != STEREO {
@@ -80,7 +81,8 @@ fn process_samples<T>(
 where
     f64: From<T>,
 {
-    let mut mp3_encoder = Builder::new().ok_or_else(|| anyhow::anyhow!("Generic error idk"))?;
+    let mut mp3_encoder =
+        Builder::new().ok_or_else(|| anyhow::anyhow!("Failed to create MP3 encoder"))?;
     mp3_encoder
         .set_num_channels(channels as u8)
         .expect("Failed to set number of channels on MP3 encoder");
@@ -96,7 +98,7 @@ where
 
     mp3_encoder
         .set_id3_tag(placeholder_id3_tag())
-        .map_err(|_| anyhow::anyhow!("id no"))?;
+        .map_err(|e| anyhow::anyhow!("Failed to set ID3 tag: {:?}", e))?;
 
     let mut mp3_encoder = mp3_encoder.build().map_err(|e| anyhow::anyhow!(e))?;
     let file = File::create(output)?;

@@ -1,4 +1,4 @@
-use std::{any, path::PathBuf};
+use std::path::PathBuf;
 
 use clap::Parser;
 
@@ -16,13 +16,17 @@ struct Args {
     output: PathBuf,
 }
 
-fn convert(input: PathBuf, output: PathBuf) {
-    println!("input: {:?}, output: {:?}", input, output);
-    let result = wav_decode(&input, &output).unwrap();
-    print!("{}", result);
+fn convert(input: PathBuf, output: PathBuf) -> anyhow::Result<()> {
+    println!("Converting: {:?} -> {:?}", input, output);
+    let result = wav_decode(&input, &output)?;
+    println!("Successfully converted to: {}", result);
+    Ok(())
 }
 
 fn main() {
     let args = Args::parse();
-    convert(args.input, args.output)
+    if let Err(e) = convert(args.input, args.output) {
+        eprintln!("Error: {}", e);
+        std::process::exit(1);
+    }
 }
