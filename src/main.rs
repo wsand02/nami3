@@ -18,8 +18,11 @@ const I16_MAXPONE: f32 = 32768.0_f32; // 2^15
 const MONO: usize = 1;
 const STEREO: usize = 2;
 
-pub fn wav_decode(input_path: &PathBuf, output_path: &PathBuf) -> Result<String, anyhow::Error> {
-    let mut reader = hound::WavReader::open(&input_path)?;
+pub fn wav_decode(
+    input_path: &std::path::Path,
+    output_path: &std::path::Path,
+) -> Result<String, anyhow::Error> {
+    let mut reader = hound::WavReader::open(input_path)?;
     let channels = reader.spec().channels as usize;
     let bit_depth = reader.spec().bits_per_sample;
     if channels != MONO && channels != STEREO {
@@ -79,7 +82,7 @@ fn process_samples<T>(
     channels: usize,
     scale: f32,
     sample_rate: u32,
-    output: &PathBuf,
+    output: &std::path::Path,
 ) -> Result<String, anyhow::Error>
 where
     f64: From<T>,
@@ -202,7 +205,7 @@ fn encode_mono(
     Ok(())
 }
 
-fn confirm_overwrite(path: &PathBuf) -> bool {
+fn confirm_overwrite(path: &std::path::Path) -> bool {
     print!("File {:?} already exists. Overwrite? [y/N]: ", path);
     io::stdout().flush().unwrap();
 
@@ -229,11 +232,9 @@ struct Args {
 fn main() -> Result<()> {
     let args = Args::parse();
 
-    if args.output.exists() && !args.force {
-        if !confirm_overwrite(&args.output) {
-            println!("Aborting conversion.");
-            return Ok(());
-        }
+    if args.output.exists() && !args.force && !confirm_overwrite(&args.output) {
+        println!("Aborting conversion.");
+        return Ok(());
     }
 
     println!("Converting: {:?} -> {:?}", args.input, args.output);
