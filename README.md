@@ -52,7 +52,7 @@ nami3 -i input.wav -o output.mp3 --force
 
 ### Output (MP3)
 - Bitrate: 128 kbps VBR (configurable in code)
-- Quality: Decent (configurable in code)
+- Quality: Decent (configurable in code:D)
 - ID3 tags: Basic placeholder tags included
 
 ## Technical Details
