@@ -79,3 +79,6 @@ The tool uses:
 - Currently supports only WAV input format
 - Output quality settings are hardcoded (128 kbps VBR)
 - ID3 tags are placeholder values and not customizable via CLI
+
+# License
+LGPL thanks to lame :DDD, see [LICENSE](LICENSE).
