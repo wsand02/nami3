@@ -13,6 +13,7 @@ This is a lightweight version of [waveemapi3](https://github.com/wsand02/waveema
 
 ## Installation
 
+### Install locally
 Requires the Rust toolchain to be installed.
 
 ```bash
@@ -20,6 +21,16 @@ git clone https://github.com/wsand02/nami3
 cd nami3
 cargo install --path .
 ```
+
+### Building from Source
+
+```bash
+git clone https://github.com/wsand02/nami3
+cd nami3
+cargo build --release
+```
+
+The binary will be available in `target/release/nami3`.
 
 ## Usage
 
@@ -68,13 +79,3 @@ The tool uses:
 - Currently supports only WAV input format
 - Output quality settings are hardcoded (128 kbps VBR)
 - ID3 tags are placeholder values and not customizable via CLI
-
-## Building from Source
-
-```bash
-git clone https://github.com/wsand02/nami3
-cd nami3
-cargo build --release
-```
-
-The binary will be available in `target/release/nami3`.
